@@ -1,6 +1,30 @@
-var db = require("../models");
+require("dotenv").config();
+const db = require("../models");
 const express = require("express");
 const router = express.Router({ mergeParams: true });
+const aws = require("aws-sdk");
+const multer = require("multer");
+const multerS3 = require("multer-s3");
+
+//aws config
+const s3 = new aws.S3({
+  apiVersion: "2006-03-01",
+  region: process.env.AWS_REGION,
+  credentials: {
+    secretAccessKey: process.env.AWS_SECRET_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY
+  }
+});
+
+const upload = multer({
+  storage: multerS3({
+    s3,
+    bucket: process.env.AWS_BUCKET,
+    key: (request, file, next) => {
+      next(null, `files/${Date.now()}_${file.originalname}`);
+    }
+  })
+});
 
 router.get("/", (req, res) => {
   db.Post.find()
@@ -20,6 +44,10 @@ router.post("/", (req, res) => {
     .catch(function(err) {
       res.send(err);
     });
+});
+
+router.post("/upload", upload.single("image"), (req, res) => {
+  res.status(200).json(req.file);
 });
 
 router.get("/:postId", (req, res) => {

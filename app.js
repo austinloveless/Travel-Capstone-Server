@@ -7,6 +7,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const commentRoutes = require("./routes/comments");
 const postRoutes = require("./routes/posts");
+const indexRoutes = require("./routes");
+const userRoutes = require("./routes/users");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -14,6 +16,8 @@ app.use(cors());
 
 app.use("/api/comments", commentRoutes);
 app.use("/api/posts", postRoutes);
+app.use(userRoutes);
+app.use(indexRoutes);
 
 app.listen(port, () => {
   console.log("listening on port", port);
