@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
+const Post = require("./post");
+const Comment = require("./comment");
+
 mongoose.set("debug", true);
 
 mongoose.connect(
@@ -7,4 +10,7 @@ mongoose.connect(
   { useNewUrlParser: true }
 );
 
-module.exports.post = require("./post");
+module.exports = {
+  Post,
+  Comment
+};
