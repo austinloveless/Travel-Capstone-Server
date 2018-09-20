@@ -27,8 +27,8 @@ const upload = multer({
 
 router.post("/register", (req, res) => {
   db.User.create(req.body)
-    .then(function(newPost) {
-      res.status(201).json(newPost);
+    .then(function(newUser) {
+      res.status(201).json(newUser);
     })
     .catch(function(err) {
       res.send(err);
