@@ -38,6 +38,8 @@ router.get("/", (req, res) => {
 
 router.post("/", (req, res) => {
   console.log("body", req.body);
+  res.status(200).send(req.body);
+  return;
   db.Post.create(req.body)
     .then(function(newPost) {
       res.status(201).json(newPost);
