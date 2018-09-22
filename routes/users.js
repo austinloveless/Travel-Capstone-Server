@@ -25,6 +25,16 @@ const upload = multer({
   })
 });
 
+router.get("/register", (req, res) => {
+  db.User.find()
+    .then(function(user) {
+      res.json(user);
+    })
+    .catch(function(err) {
+      res.send(err);
+    });
+});
+
 router.post("/register", (req, res) => {
   db.User.create(req.body)
     .then(function(newUser) {
