@@ -25,7 +25,7 @@ const upload = multer({
   })
 });
 
-router.get("/register", (req, res) => {
+router.get("/", (req, res) => {
   db.User.find()
     .then(function(user) {
       res.json(user);
@@ -35,7 +35,7 @@ router.get("/register", (req, res) => {
     });
 });
 
-router.post("/register", (req, res) => {
+router.post("/", (req, res) => {
   db.User.create(req.body)
     .then(function(newUser) {
       res.status(201).json(newUser);
@@ -47,6 +47,38 @@ router.post("/register", (req, res) => {
 
 router.post("/profileUpload", upload.single("image"), (req, res) => {
   res.status(200).json(req.file);
+});
+
+router.get("/:userId", (req, res) => {
+  db.User.findById(req.params.userId)
+    .then(function(foundUser) {
+      res.json(foundUser);
+    })
+    .catch(function(err) {
+      res.send(err);
+    });
+});
+
+router.put("/:userId", (req, res) => {
+  db.User.findOneAndUpdate({ _id: req.params.userId }, req.body, {
+    new: true
+  })
+    .then(function(post) {
+      res.json(post);
+    })
+    .catch(function(err) {
+      res.send(err);
+    });
+});
+
+router.delete("/:userId", (req, res) => {
+  db.User.remove({ _id: req.params.userId })
+    .then(function() {
+      res.json({ message: "We deleted it!" });
+    })
+    .catch(function(err) {
+      res.send(err);
+    });
 });
 
 module.exports = router;
